@@ -11,26 +11,18 @@ screen.tracer(0)
 import pandas
 
 data = pandas.read_csv("50_states.csv")
-states = []
-coordinates = []
-for index in range(len(data)):
-    if data.state[index] != 'state':
-        states.append(data.state[index].lower())
-        new_tuple = (data.x[index],data.y[index])
-        coordinates.append(new_tuple)
-print(states)
 
 game_is_on = True
 score = 0
 while game_is_on:
     user_input = screen.textinput(title=f"{score}/50 States Guessed", prompt="What's another state name?").lower()
-    if user_input in states:
+    if user_input.title() in data.state.to_list():
         score += 1
         state = Turtle()
         state.penup()
         state.hideturtle()
-        index = states.index(user_input.lower())
-        state.goto(coordinates[index])
+        state_row = data[data.state == user_input.title()]
+        state.goto(int(state_row.x),int(state_row.y))
         state.write(user_input)
     screen.update()
 
